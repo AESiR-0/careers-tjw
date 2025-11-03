@@ -5,8 +5,20 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Briefcase, Clock, ExternalLink, ChevronDown } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  MapPin,
+  Briefcase,
+  Clock,
+  ExternalLink,
+  ChevronDown,
+} from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
@@ -29,8 +41,9 @@ const jobPositions: JobPosition[] = [
     type: "Full-time",
     location: "Ahmedabad / Remote",
     experience: "2+ years",
-    description: "Plan and execute amazing events. Lead event planning, coordinate with vendors, manage logistics, and ensure memorable experiences for our attendees.",
-    tagColor: "bg-blue-500"
+    description:
+      "Plan and execute amazing events. Lead event planning, coordinate with vendors, manage logistics, and ensure memorable experiences for our attendees.",
+    tagColor: "bg-blue-500",
   },
   {
     id: "marketing-lead",
@@ -38,8 +51,9 @@ const jobPositions: JobPosition[] = [
     type: "Full-time",
     location: "Ahmedabad / Remote",
     experience: "3+ years",
-    description: "Drive marketing strategy and campaigns. Create engaging content, manage social media, analyze performance metrics, and grow our brand presence.",
-    tagColor: "bg-blue-500"
+    description:
+      "Drive marketing strategy and campaigns. Create engaging content, manage social media, analyze performance metrics, and grow our brand presence.",
+    tagColor: "bg-blue-500",
   },
   {
     id: "content-specialist",
@@ -47,8 +61,9 @@ const jobPositions: JobPosition[] = [
     type: "Full-time",
     location: "Ahmedabad / Remote",
     experience: "1+ years",
-    description: "Create engaging content across platforms. Write compelling copy, create social media content, manage content calendar, and maintain brand voice.",
-    tagColor: "bg-blue-500"
+    description:
+      "Create engaging content across platforms. Write compelling copy, create social media content, manage content calendar, and maintain brand voice.",
+    tagColor: "bg-blue-500",
   },
   {
     id: "operations-associate",
@@ -56,8 +71,9 @@ const jobPositions: JobPosition[] = [
     type: "Full-time",
     location: "Ahmedabad (Onsite)",
     experience: "1+ years",
-    description: "Keep everything running smoothly. Support day-to-day operations, coordinate with teams, manage documentation, and ensure efficient processes.",
-    tagColor: "bg-blue-500"
+    description:
+      "Keep everything running smoothly. Support day-to-day operations, coordinate with teams, manage documentation, and ensure efficient processes.",
+    tagColor: "bg-blue-500",
   },
   {
     id: "developer",
@@ -65,8 +81,9 @@ const jobPositions: JobPosition[] = [
     type: "Full-time",
     location: "Ahmedabad / Remote",
     experience: "2+ years",
-    description: "Build our platform and features. Develop responsive web applications, write clean code, collaborate with team, and maintain high code quality.",
-    tagColor: "bg-blue-500"
+    description:
+      "Build our platform and features. Develop responsive web applications, write clean code, collaborate with team, and maintain high code quality.",
+    tagColor: "bg-blue-500",
   },
   {
     id: "sales-intern",
@@ -74,8 +91,9 @@ const jobPositions: JobPosition[] = [
     type: "Internship",
     location: "Ahmedabad (Onsite)",
     duration: "3-6 months",
-    description: "Gain hands-on experience in technology sales, business development, and customer relations. Opportunity for full-time role (PPO) upon completion.",
-    tagColor: "bg-yellow-500"
+    description:
+      "Gain hands-on experience in technology sales, business development, and customer relations. Opportunity for full-time role (PPO) upon completion.",
+    tagColor: "bg-yellow-500",
   },
   {
     id: "ui-designer",
@@ -83,22 +101,24 @@ const jobPositions: JobPosition[] = [
     type: "Full-time",
     location: "Ahmedabad / Remote",
     experience: "2+ years",
-    description: "Create beautiful user experiences. Design intuitive interfaces, create prototypes, conduct user research, and collaborate with development team.",
-    tagColor: "bg-blue-500"
-  }
+    description:
+      "Create beautiful user experiences. Design intuitive interfaces, create prototypes, conduct user research, and collaborate with development team.",
+    tagColor: "bg-blue-500",
+  },
 ];
 
 function JoinUsPageContent() {
   const searchParams = useSearchParams();
-  const [selectedPosition, setSelectedPosition] = useState<JobPosition | null>(null);
+  const [selectedPosition, setSelectedPosition] = useState<JobPosition | null>(
+    null
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { toast } = useToast();
 
-  // Check for position in query params
   useEffect(() => {
     const positionId = searchParams.get("position");
     if (positionId) {
-      const position = jobPositions.find(job => job.id === positionId);
+      const position = jobPositions.find((job) => job.id === positionId);
       if (position) {
         setSelectedPosition(position);
         setIsModalOpen(true);
@@ -112,111 +132,134 @@ function JoinUsPageContent() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-black text-black mb-6 leading-tight">
-            Open Positions
+    <div className="min-h-screen bg-white text-black">
+      {/* Header Section */}
+      <header className="border-b border-gray-200 bg-white">
+        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between">
+          <img
+            src="https://talaash.thejaayveeworld.com/static/logos/png%20with%20tagline%20(black)/the%20jaayvee%20world%20logo%20with%20full%20tagline-03.png"
+            alt="The Jaayvee World Logo"
+            className="h-14 md:h-16 mb-4 md:mb-0"
+          />
+          <h1 className="text-3xl font-black tracking-tight text-center md:text-right">
+            Join Our World
           </h1>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8 font-light">
-            Discover exciting career opportunities and join our innovative team
+        </div>
+      </header>
+
+      {/* Main Section */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-5xl md:text-6xl font-black text-black mb-6 leading-tight">
+            Open Positions
+          </h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
+            Discover exciting career opportunities and join our innovative,
+            design-forward team at{" "}
+            <span className="font-semibold text-black">The Jaayvee World</span>.
           </p>
         </div>
 
-        {/* Job Listings Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Job Listings */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {jobPositions.map((position) => (
-            <Card key={position.id} className="border border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
-              <CardContent className="p-6">
+            <Card
+              key={position.id}
+              className="border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300 rounded-xl"
+            >
+              <CardContent className="p-6 flex flex-col h-full">
                 <div className="flex items-start justify-between mb-4">
-                  <h3 className="text-xl font-bold text-black">{position.title}</h3>
+                  <h3 className="text-xl font-bold">{position.title}</h3>
                   <Badge className={`${position.tagColor} text-white`}>
                     <Briefcase className="h-3 w-3 mr-1" />
                     {position.type}
                   </Badge>
                 </div>
 
-                <p className="text-gray-600 mb-6 text-sm leading-relaxed">
+                <p className="text-gray-600 text-sm mb-6 leading-relaxed flex-grow">
                   {position.description}
                 </p>
 
-                <div className="space-y-2 mb-6">
-                  <div className="flex items-center text-sm text-gray-700">
+                <div className="space-y-2 text-sm text-gray-700 mb-6">
+                  <div className="flex items-center">
                     <MapPin className="h-4 w-4 mr-2 text-gray-500" />
                     {position.location}
                   </div>
-                  <div className="flex items-center text-sm text-gray-700">
-                    <Briefcase className="h-4 w-4 mr-2 text-gray-500" />
-                    {position.type}
-                  </div>
                   {position.experience && (
-                    <div className="flex items-center text-sm text-gray-700">
+                    <div className="flex items-center">
                       <Clock className="h-4 w-4 mr-2 text-gray-500" />
                       {position.experience}
                     </div>
                   )}
                   {position.duration && (
-                    <div className="flex items-center text-sm text-gray-700">
+                    <div className="flex items-center">
                       <Clock className="h-4 w-4 mr-2 text-gray-500" />
                       {position.duration}
                     </div>
                   )}
                 </div>
 
-                <div className="flex items-end space-x-3">
-                 
-                  <Button
-                    onClick={() => handleApplyClick(position)}
-                    className="flex-1 bg-black text-white hover:bg-gray-800"
-                  >
-                    Apply Now
-                    <ExternalLink className="h-4 w-4 ml-1" />
-                  </Button>
-                </div>
+                <Button
+                  onClick={() => handleApplyClick(position)}
+                  className="w-full bg-black text-white hover:bg-gray-900 transition-colors"
+                >
+                  Apply Now
+                  <ExternalLink className="h-4 w-4 ml-1" />
+                </Button>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* Application Modal */}
+        {/* Modal */}
         {selectedPosition && (
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <DialogContent className="sm:max-w-md bg-gray-800 text-white">
+            <DialogContent className="sm:max-w-md bg-black text-white border border-gray-700">
               <DialogHeader>
-                <DialogTitle>Apply for {selectedPosition.title}</DialogTitle>
-                <DialogDescription>
-                  Fill out the form below to submit your application. We'll review it and get back to you soon.
+                <DialogTitle className="text-xl font-semibold">
+                  Apply for {selectedPosition.title}
+                </DialogTitle>
+                <DialogDescription className="text-gray-300">
+                  Fill out the form below to submit your application. We'll
+                  review it and get back to you soon.
                 </DialogDescription>
               </DialogHeader>
-              <ApplicationForm 
-                position={selectedPosition} 
+              <ApplicationForm
+                position={selectedPosition}
                 onSuccess={() => {
                   setIsModalOpen(false);
                   toast({
                     title: "Application Submitted! 🎉",
-                    description: "Thank you for your interest. We'll review your application and get back to you soon.",
+                    description:
+                      "Thank you for your interest. We'll review your application soon.",
                   });
                 }}
               />
             </DialogContent>
           </Dialog>
         )}
-      </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-200 py-6 text-center text-sm text-gray-500">
+        © {new Date().getFullYear()} The Jaayvee World — Crafted with ambition.
+      </footer>
     </div>
   );
 }
 
 export default function JoinUsPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-white flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading...</p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <JoinUsPageContent />
     </Suspense>
   );
@@ -291,7 +334,9 @@ function ApplicationForm({ position, onSuccess }: ApplicationFormProps) {
     } catch (error: any) {
       toast({
         title: "Error",
-        description: error.message || "There was an error submitting your application. Please try again.",
+        description:
+          error.message ||
+          "There was an error submitting your application. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -336,7 +381,9 @@ function ApplicationForm({ position, onSuccess }: ApplicationFormProps) {
           accept=".pdf,.doc,.docx"
           onChange={handleInputChange}
         />
-        <p className="text-xs text-gray-500">Accepted formats: PDF, DOC, DOCX</p>
+        <p className="text-xs text-gray-500">
+          Accepted formats: PDF, DOC, DOCX
+        </p>
       </div>
 
       <Button
