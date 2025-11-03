@@ -82,11 +82,14 @@ export async function POST(request: NextRequest) {
     });
 
     // Prepare email content
-    const emailSubject = `New Job Application: ${position}`;
+    const isNewRole = position === "new-role";
+    const emailSubject = isNewRole 
+      ? "New Role Application - General Interest" 
+      : `New Job Application: ${position}`;
     const emailText = `
-New Job Application Received
+${isNewRole ? "New Role Application Received" : "New Job Application Received"}
 
-Position: ${position}
+Position: ${isNewRole ? "General Application (Role Not Listed)" : position}
 Position ID: ${positionId}
 Email: ${email}
 Phone: ${phone}
@@ -97,10 +100,10 @@ Application submitted at: ${new Date().toLocaleString()}
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #333; border-bottom: 2px solid #000; padding-bottom: 10px;">
-          New Job Application Received
+          ${isNewRole ? "New Role Application Received" : "New Job Application Received"}
         </h2>
         <div style="margin-top: 20px;">
-          <p><strong>Position:</strong> ${position}</p>
+          <p><strong>Position:</strong> ${isNewRole ? "General Application (Role Not Listed)" : position}</p>
           <p><strong>Position ID:</strong> ${positionId}</p>
           <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
           <p><strong>Phone:</strong> <a href="tel:${phone}">${phone}</a></p>

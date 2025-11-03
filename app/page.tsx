@@ -34,6 +34,15 @@ interface JobPosition {
   tagColor: string;
 }
 
+const newRolePosition: JobPosition = {
+  id: "new-role",
+  title: "New Role Application",
+  type: "Full-time",
+  location: "TBD",
+  description: "You're applying for a role that isn't currently listed.",
+  tagColor: "bg-blue-500",
+};
+
 const jobPositions: JobPosition[] = [
   {
     id: "event-manager",
@@ -131,29 +140,34 @@ function JoinUsPageContent() {
     setIsModalOpen(true);
   };
 
+  const handleNewRoleClick = () => {
+    setSelectedPosition(newRolePosition);
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-white text-black">
       {/* Header Section */}
       <header className="border-b border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col items-center justify-center">
           <img
             src="https://talaash.thejaayveeworld.com/static/logos/png%20with%20tagline%20(black)/the%20jaayvee%20world%20logo%20with%20full%20tagline-03.png"
             alt="The Jaayvee World Logo"
-            className="h-14 md:h-16 mb-4 md:mb-0"
+            className="h-20 md:h-28 mb-6 transition-all duration-300"
           />
-          <h1 className="text-3xl font-black tracking-tight text-center md:text-right">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-center">
             Join Our World
           </h1>
         </div>
       </header>
 
       {/* Main Section */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-5xl md:text-6xl font-black text-black mb-6 leading-tight">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-5xl md:text-6xl font-black text-black mb-6 leading-tight tracking-tight">
             Open Positions
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
             Discover exciting career opportunities and join our innovative,
             design-forward team at{" "}
             <span className="font-semibold text-black">The Jaayvee World</span>.
@@ -161,11 +175,11 @@ function JoinUsPageContent() {
         </div>
 
         {/* Job Listings */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {jobPositions.map((position) => (
             <Card
               key={position.id}
-              className="border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300 rounded-xl"
+              className="border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 rounded-xl hover:-translate-y-1"
             >
               <CardContent className="p-6 flex flex-col h-full">
                 <div className="flex items-start justify-between mb-4">
@@ -211,17 +225,43 @@ function JoinUsPageContent() {
           ))}
         </div>
 
+        {/* New Role CTA Section */}
+        <div className="mt-16 mb-8">
+          <Card className="border-2 border-gray-300 shadow-lg bg-gradient-to-br from-gray-50 to-white">
+            <CardContent className="p-10 text-center">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4 text-black">
+                Looking for a role that is not here?
+              </h3>
+              <p className="text-gray-600 mb-6 text-lg max-w-2xl mx-auto">
+                We're always looking for talented individuals to join our team. 
+                If you don't see a position that matches your skills, we'd still love to hear from you!
+              </p>
+              <Button
+                onClick={handleNewRoleClick}
+                className="bg-black text-white hover:bg-gray-900 transition-all duration-300 px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl hover:scale-105"
+                size="lg"
+              >
+                Apply Now
+                <ExternalLink className="h-5 w-5 ml-2" />
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Modal */}
         {selectedPosition && (
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogContent className="sm:max-w-md bg-black text-white border border-gray-700">
               <DialogHeader>
                 <DialogTitle className="text-xl font-semibold">
-                  Apply for {selectedPosition.title}
+                  {selectedPosition.id === "new-role" 
+                    ? "Apply for a New Role" 
+                    : `Apply for ${selectedPosition.title}`}
                 </DialogTitle>
                 <DialogDescription className="text-gray-300">
-                  Fill out the form below to submit your application. We'll
-                  review it and get back to you soon.
+                  {selectedPosition.id === "new-role"
+                    ? "Fill out the form below to express your interest. We'll review your application and reach out if we have a suitable position."
+                    : "Fill out the form below to submit your application. We'll review it and get back to you soon."}
                 </DialogDescription>
               </DialogHeader>
               <ApplicationForm
@@ -306,7 +346,7 @@ function ApplicationForm({ position, onSuccess }: ApplicationFormProps) {
       const formDataToSend = new FormData();
       formDataToSend.append("email", formData.email);
       formDataToSend.append("phone", formData.phone);
-      formDataToSend.append("position", position.title);
+      formDataToSend.append("position", position.id === "new-role" ? "new-role" : position.title);
       formDataToSend.append("positionId", position.id);
       if (formData.resume) {
         formDataToSend.append("resume", formData.resume);
