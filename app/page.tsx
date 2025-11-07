@@ -43,78 +43,6 @@ const newRolePosition: JobPosition = {
   tagColor: "bg-blue-500",
 };
 
-const jobPositions: JobPosition[] = [
-  {
-    id: "event-manager",
-    title: "Event Manager",
-    type: "Full-time",
-    location: "Ahmedabad / Remote",
-    experience: "2+ years",
-    description:
-      "Plan and execute amazing events. Lead event planning, coordinate with vendors, manage logistics, and ensure memorable experiences for our attendees.",
-    tagColor: "bg-blue-500",
-  },
-  {
-    id: "marketing-lead",
-    title: "Marketing Lead",
-    type: "Full-time",
-    location: "Ahmedabad / Remote",
-    experience: "3+ years",
-    description:
-      "Drive marketing strategy and campaigns. Create engaging content, manage social media, analyze performance metrics, and grow our brand presence.",
-    tagColor: "bg-blue-500",
-  },
-  {
-    id: "content-specialist",
-    title: "Content Specialist",
-    type: "Full-time",
-    location: "Ahmedabad / Remote",
-    experience: "1+ years",
-    description:
-      "Create engaging content across platforms. Write compelling copy, create social media content, manage content calendar, and maintain brand voice.",
-    tagColor: "bg-blue-500",
-  },
-  {
-    id: "operations-associate",
-    title: "Operations Associate",
-    type: "Full-time",
-    location: "Ahmedabad (Onsite)",
-    experience: "1+ years",
-    description:
-      "Keep everything running smoothly. Support day-to-day operations, coordinate with teams, manage documentation, and ensure efficient processes.",
-    tagColor: "bg-blue-500",
-  },
-  {
-    id: "developer",
-    title: "Developer (React.js/Next.js)",
-    type: "Full-time",
-    location: "Ahmedabad / Remote",
-    experience: "2+ years",
-    description:
-      "Build our platform and features. Develop responsive web applications, write clean code, collaborate with team, and maintain high code quality.",
-    tagColor: "bg-blue-500",
-  },
-  {
-    id: "sales-intern",
-    title: "Inside Sales Intern",
-    type: "Internship",
-    location: "Ahmedabad (Onsite)",
-    duration: "3-6 months",
-    description:
-      "Gain hands-on experience in technology sales, business development, and customer relations. Opportunity for full-time role (PPO) upon completion.",
-    tagColor: "bg-yellow-500",
-  },
-  {
-    id: "ui-designer",
-    title: "UI/UX Designer",
-    type: "Full-time",
-    location: "Ahmedabad / Remote",
-    experience: "2+ years",
-    description:
-      "Create beautiful user experiences. Design intuitive interfaces, create prototypes, conduct user research, and collaborate with development team.",
-    tagColor: "bg-blue-500",
-  },
-];
 
 function JoinUsPageContent() {
   const searchParams = useSearchParams();
@@ -122,7 +50,70 @@ function JoinUsPageContent() {
     null
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [jobPositions, setJobPositions] = useState<JobPosition[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+
+  // Fetch careers from API
+  useEffect(() => {
+    const fetchCareers = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://talaash.thejaayveeworld.com';
+        const apiUrl = `${API_BASE_URL}/api/careers?activeOnly=true`;
+        console.log('Fetching careers from:', apiUrl);
+        
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        console.log('API Response status:', response.status);
+        
+        if (response.ok) {
+          const result = await response.json();
+          console.log('API Response data:', result);
+          
+          if (result.success && result.data && Array.isArray(result.data)) {
+            // Transform API data to JobPosition format
+            const positions: JobPosition[] = result.data.map((career: any) => ({
+              id: career.id,
+              title: career.title,
+              type: career.type as "Full-time" | "Internship" | "Contract",
+              location: career.location,
+              experience: career.experience || undefined,
+              duration: career.duration || undefined,
+              description: career.description,
+              tagColor: career.tagColor || "bg-blue-500",
+            }));
+            console.log(`✅ Loaded ${positions.length} careers from API`);
+            setJobPositions(positions);
+          } else {
+            console.warn('⚠️ Invalid API response format. Response:', result);
+            setError('Invalid response from server');
+            setJobPositions([]);
+          }
+        } else {
+          const errorText = await response.text();
+          console.error('API Error response:', response.status, errorText);
+          setError('Failed to load careers. Please try again later.');
+          setJobPositions([]);
+        }
+      } catch (error) {
+        console.error('Error fetching careers:', error);
+        setError('Failed to load careers. Please check your connection and try again.');
+        setJobPositions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCareers();
+  }, []);
 
   useEffect(() => {
     const positionId = searchParams.get("position");
@@ -175,8 +166,38 @@ function JoinUsPageContent() {
         </div>
 
         {/* Job Listings */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {jobPositions.map((position) => (
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Card key={i} className="border border-gray-200 shadow-md rounded-xl">
+                <CardContent className="p-6">
+                  <div className="animate-pulse">
+                    <div className="h-6 bg-gray-200 rounded mb-4"></div>
+                    <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded mb-6"></div>
+                    <div className="h-10 bg-gray-200 rounded"></div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : error ? (
+          <div className="text-center py-16 mb-16">
+            <p className="text-red-600 text-lg mb-4">{error}</p>
+            <Button
+              onClick={() => window.location.reload()}
+              className="bg-black text-white hover:bg-gray-900"
+            >
+              Retry
+            </Button>
+          </div>
+        ) : jobPositions.length === 0 ? (
+          <div className="text-center py-16 mb-16">
+            <p className="text-gray-600 text-lg">No open positions at the moment. Check back soon!</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {jobPositions.map((position) => (
             <Card
               key={position.id}
               className="border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 rounded-xl hover:-translate-y-1"
@@ -223,7 +244,8 @@ function JoinUsPageContent() {
               </CardContent>
             </Card>
           ))}
-        </div>
+          </div>
+        )}
 
         {/* New Role CTA Section */}
         <div className="mt-16 mb-8">
