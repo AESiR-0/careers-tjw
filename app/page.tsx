@@ -98,7 +98,7 @@ export default async function CareersPage() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="mb-8">
               <img
-                src="https://talaash.thejaayveeworld.com/static/logos/png%20with%20tagline%20(white)/the%20jaayvee%20world%20logo%20with%20full%20tagline-03.png"
+                src="https://www.thejaayveeworld.com/static/logo(icon)%20white/jaayvee%20world%20icon-03.png"
                 alt="The Jaayvee World Logo"
                 className="h-16 md:h-24 mx-auto mb-6 transition-all duration-300 hover:scale-105"
               />
